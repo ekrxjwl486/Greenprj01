@@ -15,36 +15,10 @@
   <div id="main">
 
 	<h2>프로젝트 테스트</h2>
-	<a href="/a">ajax01.html</a><br>
+	<li><a href="/mypage?user_id=${ sessionScope.login.user_id }">${ sessionScope.login.user_name }페이지</a></li>
   
   
-	<h2>Home</h2>
-	<a href="/User/List">사용자 목록</a><br>
-	<hr />
 	
-	<h2>게시판</h2>
-	<a href="/Board/List?menu_id=MENU01">게시물 목록</a><br>
-	<hr />
-	
-	<h2>자료실</h2>
-	<a href="/Pds/List?menu_id=MENU01&nowpage=1&pagecount=4&pagegrpnum=1">자료실 페이징</a><br> 
-	<a href="/Pds/WriteForm?menu_id=MENU01&bnum=0&lvl=0&step=0&nref=0&page=1">자료실 추가</a><br>
-	<hr />
-		
-	<hr />
-	<h2>메뉴</h2>
-	<a href="/Menus/List">메뉴 관리</a>
-	
-	<hr />
-	${ sessionScope.login.user_name } 님 환영합니다.<br>
-    당신의 관심사 ${ login.user_cate } 입니다.<br>
-    <a href="/logout">로그아웃</a>
-	
-	<hr />
-	<h2>Ajax Test</h2>
-	<a href="/a">ajax01.html</a><br>
-	<a href="/b">ajax02.html</a><br>
-	<a href="/c">ajax03.html</a><br>
 	
 	
   </div>	

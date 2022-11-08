@@ -1,22 +1,15 @@
 package com.green.user.controller;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.green.user.service.UserService;
 import com.green.user.vo.UserVo;
@@ -25,11 +18,18 @@ import com.green.user.vo.UserVo;
 public class HomeController {
 	
 	@Autowired
-	private  UserService   userService;
+	private UserService  userService; 
 	
 	@RequestMapping("/")
 	public  String  home() {
-		return "home";
+		return "home";   // /WEB-INF/views/home.jsp
+	}
+	
+	@GetMapping("/mypage")
+	public String mypage( String user_id, Model model ) {
+		UserVo vo = userService.getUser(user_id);
+		model.addAttribute("vo", vo );
+		return "user/mypage";
 	}
 	
 	@RequestMapping("/login")
@@ -66,108 +66,4 @@ public class HomeController {
 		return "redirect:/";  // 로그아웃시 이동할 주소 -> /login
 	}
 	
-	@RequestMapping("/User/List")
-	public  String  list( Model model ) {
-		
-		List<UserVo> userList = userService.getUserList();
-		
-		model.addAttribute("userList", userList);
-		
-		
-		return "user/list"; 
-	} 
-	
-	// html 로 이동
-	/*
-	@RequestMapping("/a")
-	public  String  a() {
-		return "redirect:/static/html/ajax01.html";
-		//return  "ajax01.html";  // 오류  /WEB-INF/ajax01.html.jsp
-	}
-	@RequestMapping("/b")
-	public  String  b() {
-		return "redirect:/static/html/ajax02.html";
-	}*/
-	
-	@RequestMapping("/{val}")
-	public  String  html( @PathVariable String val ) {
-		String loc = "redirect:/static/html/";
-		switch(val) {
-		case "a" : loc += "ajax01.html"; break; 
-		case "b" : loc += "ajax02.html"; break; 
-		case "c" : loc += "ajax03.html"; break; 
-		}
-		return loc;
-	}
-	
-	//-------------------------------------
-	@RequestMapping("/ajax")
-	public  void   ajax(  String v, HttpServletResponse response  ) {
-		
-		String  fmt  = "{"
-				+ "   \"id\"   : \"sky\","
-				+ "   \"pass\" : \"234\","
-				+ "   \"v\"    : \"%s\" "
-				+ "}";   // json
-		String  data = String.format(fmt, v);
-		
-		try {		
-			response.setContentType("application/json;charset=utf-8");
-			PrintWriter  out = response.getWriter();
-			out.print( data );
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-	}
-	
-	// json library 사용 : map data -> json으로 출력
-	// json library 추가해야함 pom.xml : jackson-databind-2.12.0.jar
-	
-	// @ResponseBody 사용 : viewresolver 를 거치지 않고 xml, json을 출력가능하게 해준다	
-	@RequestMapping("/ajax2")
-	@ResponseBody
-	public  Map<String, Object>   ajax2(  String v ) {
-		Map<String, Object> map = new HashMap<>(); 
-		map.put("id",   "sky");
-		map.put("pass", "234");
-		map.put("v",     v);
-		return   map;   // map -> .json
-	}
-	
-	@RequestMapping("/ajaxlist")
-	@ResponseBody
-	public  Map<Integer, Object > ajaxlist() {
-		
-		List<UserVo> userList  =  userService.getUserList();
-		// arraylist -> map
-		
-		Map<Integer, Object> map = new HashMap<>();
-		for (int i = 0; i < userList.size(); i++) {
-			map.put(i, userList.get(i) );
-		}		
-		return map;
-	}
-	
-	@RequestMapping("/ajaxlist2") 
-	@ResponseBody
-	public  Map<String, Object> ajaxlist2() {
-		
-		List<UserVo> userList = userService.getUserList();
-		Map<String, Object> map = new HashMap<>();
-		map.put("data", userList);		
-		return map;
-	}
-	
 }
-
-
-
-
-
-
-
-
-

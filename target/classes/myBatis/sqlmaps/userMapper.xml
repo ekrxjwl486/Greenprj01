@@ -4,6 +4,14 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="User">
+
+    <select id="User" resultType="com.green.user.vo.UserVo">
+      SELECT *
+        FROM muser, university
+       WHERE   user_id = #{user_id}
+         AND   muser.univ_idx = university.univ_idx
+    </select>
+    
   
     <select id="UserList"
       resultType="com.green.user.vo.UserVo">
